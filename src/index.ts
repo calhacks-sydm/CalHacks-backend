@@ -263,7 +263,14 @@ app.put('/user/:id/questionsdone/update/:question_id', async (req: Request, res:
             score
         }
     });
+    console.log(questionsDone);
+    return res.json(questionsDone);
 })
+
+
+
+
+
 
 
 const server = app.listen(3000, () => {

@@ -11,12 +11,11 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "QuestionsDone" (
-    "id" INT8 NOT NULL DEFAULT unique_rowid(),
     "user_id" INT8 NOT NULL,
     "question_id" INT8 NOT NULL,
-    "score" STRING NOT NULL,
+    "score" INT8 NOT NULL,
 
-    CONSTRAINT "QuestionsDone_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "QuestionsDone_pkey" PRIMARY KEY ("user_id","question_id")
 );
 
 -- CreateTable
@@ -41,8 +40,20 @@ CREATE TABLE "Questions" (
     "id" INT8 NOT NULL DEFAULT unique_rowid(),
     "question" STRING NOT NULL,
     "topic_id" INT8 NOT NULL,
+    "hint" STRING NOT NULL,
 
     CONSTRAINT "Questions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Subproblems" (
+    "id" INT8 NOT NULL DEFAULT unique_rowid(),
+    "count" INT8 NOT NULL,
+    "question_id" INT8 NOT NULL,
+    "title" STRING NOT NULL,
+    "description" STRING NOT NULL,
+
+    CONSTRAINT "Subproblems_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -53,6 +64,28 @@ CREATE TABLE "Solutions" (
 
     CONSTRAINT "Solutions_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateTable
+CREATE TABLE "DiagnosticQuestionsDone" (
+    "report_id" INT8 NOT NULL,
+    "question_id" INT8 NOT NULL,
+    "user_id" INT8 NOT NULL,
+    "feedback" STRING NOT NULL,
+    "user_input" STRING NOT NULL,
+
+    CONSTRAINT "DiagnosticQuestionsDone_pkey" PRIMARY KEY ("report_id","question_id","user_id")
+);
+
+-- CreateTable
+CREATE TABLE "Reports" (
+    "id" INT8 NOT NULL DEFAULT unique_rowid(),
+    "course_id" INT8 NOT NULL,
+
+    CONSTRAINT "Reports_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Solutions_question_id_key" ON "Solutions"("question_id");
@@ -70,4 +103,19 @@ ALTER TABLE "Topics" ADD CONSTRAINT "Topics_course_id_fkey" FOREIGN KEY ("course
 ALTER TABLE "Questions" ADD CONSTRAINT "Questions_topic_id_fkey" FOREIGN KEY ("topic_id") REFERENCES "Topics"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Subproblems" ADD CONSTRAINT "Subproblems_question_id_fkey" FOREIGN KEY ("question_id") REFERENCES "Questions"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Solutions" ADD CONSTRAINT "Solutions_question_id_fkey" FOREIGN KEY ("question_id") REFERENCES "Questions"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DiagnosticQuestionsDone" ADD CONSTRAINT "DiagnosticQuestionsDone_report_id_fkey" FOREIGN KEY ("report_id") REFERENCES "Reports"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DiagnosticQuestionsDone" ADD CONSTRAINT "DiagnosticQuestionsDone_question_id_fkey" FOREIGN KEY ("question_id") REFERENCES "Questions"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DiagnosticQuestionsDone" ADD CONSTRAINT "DiagnosticQuestionsDone_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Reports" ADD CONSTRAINT "Reports_course_id_fkey" FOREIGN KEY ("course_id") REFERENCES "CourseInfo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

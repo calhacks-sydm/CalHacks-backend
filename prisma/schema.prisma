@@ -24,7 +24,7 @@ model User {
 model QuestionsDone {
   user_id     BigInt   
   question_id BigInt   
-  score       Int
+  score       BigInt
   user        User     @relation(fields: [user_id], references: [id])
   question    Questions @relation(fields: [question_id], references: [id])
 
