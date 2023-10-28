@@ -14,5 +14,13 @@
     "prisma": "^5.5.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sktlim/CalHacks-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sktlim/CalHacks-backend/issues"
+  },
+  "homepage": "https://github.com/sktlim/CalHacks-backend#readme"
 }
