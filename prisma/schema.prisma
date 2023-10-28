@@ -18,12 +18,13 @@ model User {
   email        String         @unique
   password     String
   questionsDone QuestionsDone[]
+  diagnosticQuestionsDone DiagnosticQuestionsDone[]
 }
 
 model QuestionsDone {
   user_id     BigInt   
   question_id BigInt   
-  score       String
+  score       Int
   user        User     @relation(fields: [user_id], references: [id])
   question    Questions @relation(fields: [question_id], references: [id])
 
@@ -34,6 +35,7 @@ model CourseInfo {
   id      BigInt   @id @default(autoincrement())
   course_name String
   topics  Topics[]
+  report Reports[]
 }
 
 model Topics {
@@ -53,6 +55,7 @@ model Questions {
   solution    Solutions?
   questionsDone QuestionsDone[]
   subproblems Subproblems[]
+  diagnosticProblems DiagnosticQuestionsDone[]
 }
 
 model Subproblems {
@@ -69,4 +72,26 @@ model Solutions {
   question_id BigInt     @unique
   solution    String
   question    Questions  @relation(fields: [question_id], references: [id])
+}
+
+model DiagnosticQuestionsDone {
+  report_id   BigInt
+  question_id BigInt
+  user_id     BigInt
+  feedback    String
+  user_input  String
+
+  report      Reports    @relation(fields: [report_id], references: [id])
+  question    Questions  @relation(fields: [question_id], references: [id])
+  user        User       @relation(fields: [user_id], references: [id])
+
+  @@id([report_id, question_id, user_id])
+}
+
+model Reports {
+  id          BigInt      @id @default(autoincrement())
+  course_id   BigInt      
+
+  course      CourseInfo @relation(fields: [course_id], references: [id])
+  diagnosticQuestionsDone DiagnosticQuestionsDone[]
 }
