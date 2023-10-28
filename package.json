@@ -15,6 +15,7 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
+<<<<<<< Updated upstream
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sktlim/CalHacks-backend.git"
@@ -23,4 +24,9 @@
     "url": "https://github.com/sktlim/CalHacks-backend/issues"
   },
   "homepage": "https://github.com/sktlim/CalHacks-backend#readme"
+=======
+  "dependencies": {
+    "@prisma/client": "^5.5.2"
+  }
+>>>>>>> Stashed changes
 }
