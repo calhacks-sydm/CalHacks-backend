@@ -9,3 +9,52 @@ datasource db {
   provider = "cockroachdb"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  id           BigInt         @id @default(autoincrement())
+  first_name   String
+  last_name    String
+  email        String
+  password     String
+  questionsDone QuestionsDone[]
+}
+
+model QuestionsDone {
+  id          BigInt   @id @default(autoincrement())
+  user_id     BigInt   
+  question_id BigInt   
+  score       String
+  user        User     @relation(fields: [user_id], references: [id])
+  question    Questions @relation(fields: [question_id], references: [id])
+}
+
+model CourseInfo {
+  id      BigInt   @id @default(autoincrement())
+  course_name String
+  topics  Topics[]
+}
+
+model Topics {
+  id          BigInt       @id @default(autoincrement())
+  topic_name  String
+  course_id   BigInt
+  course      CourseInfo   @relation(fields: [course_id], references: [id])
+  questions   Questions[]
+}
+
+model Questions {
+  id          BigInt       @id @default(autoincrement())
+  question    String
+  topic_id    BigInt
+  topic       Topics       @relation(fields: [topic_id], references: [id])
+  solution    Solutions?
+  questionsDone QuestionsDone[]
+}
+
+model Solutions {
+  id          BigInt     @id @default(autoincrement())
+  question_id BigInt     @unique
+  solution    String
+  question    Questions  @relation(fields: [question_id], references: [id])
+}
