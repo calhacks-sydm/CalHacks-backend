@@ -1,3 +1,4 @@
+import '../utils.ts'
 import express, { Response, Request } from 'express';
 import { PrismaClient } from '@prisma/client';
 
@@ -65,11 +66,14 @@ app.post('/users/login', async (req: Request, res: Response) => {
             password
         }
     });
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
     console.log(user);
     return res.json(user);
 })
 
-app.get('/courseInfo', async (req: Request, res: Response) => {
+app.get('/courseinfo', async (req: Request, res: Response) => {
     const courseInfo = await prisma.courseInfo.findMany();
     console.log(courseInfo);
     return res.json(courseInfo);
